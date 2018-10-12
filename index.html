@@ -31,7 +31,8 @@
 	function send(message) {
 		var api = document.getElementById("api").value;
 		var verb = document.getElementById("verb").value;
-		ws.call(api+"/"+verb, {data:message}).then(replyok, replyerr);
+		var data = JSON.parse(JSON.stringify(message) || "null");
+		ws.call(api+"/"+verb, data).then(replyok, replyerr);
 	}
     function makeStr() {
 	  var text = "";
@@ -52,9 +53,9 @@
     <h1>WebSocket Echo</h1>
     <div id="connected">Not Connected</div>
     <div id="main" style="visibility:hidden">
-    API: <input type="text" id="api" value="hello" size="80"/><br/>
-    VERB: <input type="text" id="verb" value="ping" size="80"/><br/>
-    Enter Message: <input type="text" id="msg" name="message" value="Dummy" size="80" onchange="send(this.value)"/><button onclick="makeStr();">Generate Msg</button><br/>
+    API: <input type="text" id="api" value="monitor" size="80"/><br/>
+    VERB: <input type="text" id="verb" value="get" size="80"/><br/>
+    Enter Message: <input type="text" id="msg" name="message" value='{"apis": true}' size="80" onchange="send(this.value)"/><button onclick="makeStr();">Generate Msg</button><br/>
     Server says... <div id="output"></div>
     Events: <div id="outevt"></div>
     <br>
