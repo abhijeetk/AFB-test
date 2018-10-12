@@ -4,8 +4,6 @@
   <icon src="icon.png"/>
   <content src="index.html" type="text/html"/>
   <description>ws-test-igalia Proof of Concept</description>
-  <author>LGE-SVL</author>
-  <license>CLOSED</license>
   <feature name="urn:AGL:widget:required-permission">
     <param name="urn:AGL:permission::public:no-htdocs" value="required" />
   </feature>

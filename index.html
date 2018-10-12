@@ -4,7 +4,7 @@
     <title>Test of AFB Echo</title>
     <script type="text/javascript" src="AFB.js"></script>
     <script type="text/javascript">
-	var afb;
+	afb = new AFB("api", "HELLO");
 	var ws;
 
 	function onopen() {
@@ -17,7 +17,6 @@
 		document.getElementById("connected").innerHTML = "Connected Closed";
 	}
 	function init() {
-		afb = new AFB("api", "hello");
 		ws = new afb.ws(onopen, onabort);
 	}
 	function replyok(obj) {
@@ -34,18 +33,32 @@
 		var verb = document.getElementById("verb").value;
 		ws.call(api+"/"+verb, {data:message}).then(replyok, replyerr);
 	}
+    function makeStr() {
+	  var text = "";
+	  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	  for (var i = 0; i < 10; i++)
+	    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+	  document.getElementById("msg").value = text;
+	  return text;
+	}
+	function sendMsg() {
+	  send(document.getElementById("msg").value);
+	}
     </script>
 </head>
-<body onload="">
-	<button onclick="init();">Click me</button>
+<body onload="init();">
     <h1>WebSocket Echo</h1>
     <div id="connected">Not Connected</div>
     <div id="main" style="visibility:hidden">
     API: <input type="text" id="api" value="hello" size="80"/><br/>
     VERB: <input type="text" id="verb" value="ping" size="80"/><br/>
-    Enter Message: <input type="text" name="message" value="" size="80" onchange="send(this.value)"/><br/>
+    Enter Message: <input type="text" id="msg" name="message" value="Dummy" size="80" onchange="send(this.value)"/><button onclick="makeStr();">Generate Msg</button><br/>
     Server says... <div id="output"></div>
     Events: <div id="outevt"></div>
+    <br>
+    <button onclick="sendMsg();">send Msg</button>
     </div>
 
 </body>
