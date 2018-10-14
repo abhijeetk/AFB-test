@@ -8,7 +8,36 @@
     <param name="urn:AGL:permission::public:no-htdocs" value="required" />
   </feature>
   <feature name="urn:AGL:widget:required-api">
+  <!--
+    NOTE :
+    Added all services supported by board.
+    Use command : 'ls /run/user/0/apis/ws'
+
+    windowmanager and homescreen are essential
+  -->
     <param name="windowmanager" value="ws" />
     <param name="homescreen" value="ws" />
+
+    <param name="Bluetooth-Manager" value="ws" />
+    <param name="geoclue" value="ws" />
+    <param name="identity" value="ws" />
+    <param name="low-can" value="ws" />
+    <param name="nfc" value="ws" />
+    <param name="persistence" value="ws" />
+    <param name="unicens" value="ws" />
+    <param name="mediascanner" value="ws" />
+  <!-- FAILING ON MY MACHINE
+    <param name="radio" value="ws" />
+  -->
+    <param name="gps" value="ws" />
+    <param name="mediaplayer" value="ws" />
+    <param name="naviapi" value="ws" />
+    <param name="signal-composer" value="ws" />
+    <param name="wifi-manager" value="ws" />
+  <!-- NOT SUPPORTED On=n MY MACHINE
+    <param name="ahl-4a" value="ws" />
+    <param name="network-manager" value="ws" />
+    <param name="weather" value="ws" />
+  -->
   </feature>
 </widget>
