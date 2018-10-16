@@ -78,3 +78,46 @@ root@m3ulcb:/# ls -Z ./run/user/0/apis/ws
 * gps                * mediascanner  * signal-composer
 * homescreen         * naviapi       * unicens
 ```
+
+### How to verify HVAC 
+
+1. HVAC is a part of <AGL_SRC>/meta-agl-demo
+2. Open meta-agl-demo/recipes-demo-hmi/hvac/hvac_git.bb
+3. git clone git://gerrit.automotivelinux.org/gerrit/apps/hvac and checkout branch eel
+4. directory binding : Binding related code which runs as websocket server.
+   directory app : It contains Qt/Qml application which can be lauched from HomeScreen.
+5. Boot AGL on target and launch HVAC by clicking homescreen Icon.
+6. Login to target prompt and check on which port HVAC server is running.
+```
+root@m3ulcb:~# ps -aux | grep hvac
+root      4427  0.0  0.2   9096  4528 ?        SNs  19:04   0:00 afbd-hvac@0.1
+root      4443  0.1  3.0 478732 55348 ?        SNl  19:04   0:00 /var/local/lib/afm/applications/hvac/0.1/bin/hvac 1047 HELLO
+```
+7. Get information from WS server.
+I checked source code inside /binding directory which provides API to be accessed from WS/HTTP.
+```
+/*
+ * @brief Read all values
+ *
+ * @param struct afb_req : an afb request structure
+ *
+ */
+static void get(struct afb_req request)
+{
+	AFB_DEBUG("Getting all values");
+	json_object *ret_json;
+
+	ret_json = json_object_new_object();
+	json_object_object_add(ret_json, "LeftTemperature", json_object_new_int(read_temp_left_zone()));
+	json_object_object_add(ret_json, "RightTemperature", json_object_new_int(read_temp_right_zone()));
+	json_object_object_add(ret_json, "FanSpeed", json_object_new_int(read_fanspeed()));
+
+	afb_req_success(request, ret_json, NULL);
+}
+```
+8. Run following command on target to get information using HTTP.
+```
+root@m3ulcb:~# curl localhost:1047/api/hvac/get
+{"response":{"LeftTemperature":21,"RightTemperature":21,"FanSpeed":19},"jtype":"afb-reply","request":{"status":"success","uuid":"49379b89-f5b7-459a-aa1a-1e7aaeac03ef"}}
+```
+
